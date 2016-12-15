@@ -95,7 +95,7 @@ struct ccx_demuxer
 
       /* File handles */
       FILE *fh_out_elementarystream;
-      int infd; // descriptor number to input.
+      int infd;   // descriptor number to input.
       LLONG past; /* Position in file, if in sync same as ftell()  */
 
       // TODO relates to fts_global
@@ -120,65 +120,29 @@ struct ccx_demuxer
       unsigned last_pat_length;
 
       unsigned char *filebuffer;
-      LLONG filebuffer_start; // Position of buffer start relative to file
-      unsigned int filebuffer_pos; // Position of pointer relative to buffer start
-      unsigned int bytesinbuffer; // Number of bytes we actually have on buffer
+      LLONG filebuffer_start;       // Position of buffer start relative to file
+      unsigned int filebuffer_pos;  // Position of pointer relative to buffer start
+      unsigned int bytesinbuffer;   // Number of bytes we actually have on buffer
 
       int warning_program_not_found_shown;
 
-      // Remember if the last header was valid. Used to suppress too much output
-      // and the expected unrecognized first header for TiVo files.
-      int strangeheader;
-      #ifdef ENABLE_FFMPEG
+      int strangeheader;      // Remember if the last header was valid. Used to suppress too much output
+      #ifdef ENABLE_FFMPEG    // and the expected unrecognized first header for TiVo files.
       void *ffmpeg_ctx;
       #endif
 
       void *parent;
 
-      //Will contain actual Demuxer Context
-      void *private_data;
+      void *private_data;// Will contain actual Demuxer Context
 
-      void (*print_cfg)
-      (
-        struct ccx_demuxer *ctx
-      );
-
-      void (*reset)
-      (struct ccx_demuxer *ctx
-      );
-
-      void (*close)
-      (
-        struct ccx_demuxer *ctx
-      );
-
-      int (*open)
-      (
-        struct ccx_demuxer *ctx,
-        const char *file_name
-      );
-
-      int (*is_open)
-      (
-        struct ccx_demuxer *ctx
-      );
-
-      int (*get_stream_mode)
-      (
-        struct ccx_demuxer *ctx
-      );
-
-      LLONG (*get_filesize)
-      (
-        struct ccx_demuxer *ctx
-      );
-
-      int (*write_es)
-      (
-        struct ccx_demuxer *ctx,
-        unsigned char* buf,
-        size_t len
-      );
+      void (*reset)     (struct ccx_demuxer *ctx);
+      void (*close)     (struct ccx_demuxer *ctx);
+      void (*print_cfg) (struct ccx_demuxer *ctx);
+      int (*open)       (struct ccx_demuxer *ctx, const char *file_name);
+      int (*is_open)    (struct ccx_demuxer *ctx);
+      int (*get_stream_mode)(struct ccx_demuxer *ctx);
+      int (*write_es)   (struct ccx_demuxer *ctx, unsigned char* buf, size_t len);
+      LLONG (*get_filesize)(struct ccx_demuxer *ctx);
 };
 
 struct demuxer_data{
@@ -194,83 +158,28 @@ struct demuxer_data{
       struct demuxer_data *next_program;
 };
 
-struct cap_info *get_sib_stream_by_type(
-      struct cap_info* program,
-      enum ccx_code_type type
-);
+struct cap_info *get_sib_stream_by_type(struct cap_info* program, enum ccx_code_type type);
+struct ccx_demuxer *init_demuxer(void *parent,struct demuxer_cfg *cfg);
 
-struct ccx_demuxer *init_demuxer(
-      void *parent,
-      struct demuxer_cfg *cfg
-);
-
-void ccx_demuxer_delete(
-      struct ccx_demuxer **ctx
-);
+void ccx_demuxer_delete(struct ccx_demuxer **ctx);
 
 struct demuxer_data*alloc_demuxer_data(void);
 
-void delete_demuxer_data(
-      struct demuxer_data *data
-;
+void delete_demuxer_data(struct demuxer_data *data);
 
-int update_capinfo(
-      struct ccx_demuxer *ctx,
-      int pid,
-      enum ccx_stream_type stream,
-      enum ccx_code_type codec,
-      int pn,
-      void *private_data
-);
+int update_capinfo(struct ccx_demuxer *ctx,       int pid,
+                   enum   ccx_stream_type stream, enum ccx_code_type codec,
+                   int    pn,                     void *private_data);
 
-struct cap_info * get_cinfo(
-      struct ccx_demuxer *ctx,
-      int pid
-);
-
-int need_cap_info(
-      struct ccx_demuxer *ctx,
-      int program_number
-);
-
-int need_cap_info_for_pid(
-      struct ccx_demuxer *ctx,
-      int pid
-);
-
-struct demuxer_data *get_best_data(
-      struct demuxer_data *data
-);
-
-struct demuxer_data *get_data_stream(
-      struct demuxer_data *data,
-      int pid
-);
-
-int get_best_stream(
-      struct ccx_demuxer *ctx
-);
-
-void ignore_other_stream(
-      struct ccx_demuxer *ctx,
-      int pid
-);
-
-void dinit_cap(
-      struct ccx_demuxer *ctx
-);
-
-int get_programme_number(
-      struct ccx_demuxer *ctx,
-      int pid
-);
-
-struct cap_info* get_best_sib_stream(
-      struct cap_info* program
-);
-
-void ignore_other_sib_stream(
-      struct cap_info* head,
-      int pid
-);
+int get_best_stream         (struct ccx_demuxer *ctx);
+int get_programme_number    (struct ccx_demuxer *ctx, int pid);
+int need_cap_info_for_pid   (struct ccx_demuxer *ctx, int pid);
+int need_cap_info           (struct ccx_demuxer *ctx, int program_number);
+struct cap_info * get_cinfo (struct ccx_demuxer *ctx, int pid);
+void ignore_other_stream    (struct ccx_demuxer *ctx, int pid);
+void dinit_cap              (struct ccx_demuxer *ctx);
+void ignore_other_sib_stream(struct cap_info* head, int pid);
+struct cap_info* get_best_sib_stream(struct cap_info* program);
+struct demuxer_data *get_best_data  (struct demuxer_data *data);
+struct demuxer_data *get_data_stream(struct demuxer_data *data, int pid);
 #endif

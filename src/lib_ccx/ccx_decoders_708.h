@@ -263,18 +263,12 @@ typedef struct ccx_dtvcc_symbol
 	x.sym = (c1 << 8) | c2;
 }
 
-#define CCX_DTVCC_SYM_IS_16(x)
-	(x.len == 2)
-#define CCX_DTVCC_SYM(x)
-	((unsigned char)(x.sym))
-#define CCX_DTVCC_SYM_16_FIRST(x)
-	((unsigned char)(x.sym >> 8))
-#define CCX_DTVCC_SYM_16_SECOND(x)
-	((unsigned char)(x.sym & 0xff))
-#define CCX_DTVCC_SYM_IS_EMPTY(x)
-	(x.len == 0)
-#define CCX_DTVCC_SYM_IS_SET(x)
-	(x.len > 0)
+#define CCX_DTVCC_SYM_IS_16(x)			(x.len == 2)
+#define CCX_DTVCC_SYM(x)						((unsigned char)(x.sym))
+#define CCX_DTVCC_SYM_16_FIRST(x)		((unsigned char)(x.sym >> 8))
+#define CCX_DTVCC_SYM_16_SECOND(x)	((unsigned char)(x.sym & 0xff))
+#define CCX_DTVCC_SYM_IS_EMPTY(x)		(x.len == 0)
+#define CCX_DTVCC_SYM_IS_SET(x)			(x.len > 0)
 
 typedef struct ccx_dtvcc_window
 {
@@ -292,28 +286,28 @@ typedef struct ccx_dtvcc_window
 	int col_count;
 	int pen_style;
 	int win_style;
-	unsigned char commands[6]; // Commands used to create this window
-	ccx_dtvcc_window_attribs attribs;
 	int pen_row;
 	int pen_column;
+	int memory_reserved;
+	int is_empty;
+	unsigned char commands[6]; // Commands used to create this window
+	LLONG time_ms_show;
+	LLONG time_ms_hide;
+	ccx_dtvcc_window_attribs attribs;
 	ccx_dtvcc_symbol *rows[CCX_DTVCC_MAX_ROWS];
 	ccx_dtvcc_pen_color pen_colors[CCX_DTVCC_MAX_ROWS];
 	ccx_dtvcc_pen_attribs pen_attribs[CCX_DTVCC_MAX_ROWS];
-	int memory_reserved;
-	int is_empty;
-	LLONG time_ms_show;
-	LLONG time_ms_hide;
 } ccx_dtvcc_window;
 
 typedef struct dtvcc_tv_screen
 {
-	ccx_dtvcc_symbol chars[CCX_DTVCC_SCREENGRID_ROWS][CCX_DTVCC_SCREENGRID_COLUMNS];
-	ccx_dtvcc_pen_color pen_colors[CCX_DTVCC_SCREENGRID_ROWS];
+	int service_number;
+	unsigned int cc_count;
+	ccx_dtvcc_symbol 			chars[CCX_DTVCC_SCREENGRID_ROWS][CCX_DTVCC_SCREENGRID_COLUMNS];
+	ccx_dtvcc_pen_color 	pen_colors[CCX_DTVCC_SCREENGRID_ROWS];
 	ccx_dtvcc_pen_attribs pen_attribs[CCX_DTVCC_SCREENGRID_ROWS];
 	LLONG time_ms_show;
 	LLONG time_ms_hide;
-	unsigned int cc_count;
-	int service_number;
 } dtvcc_tv_screen;
 
 /**
@@ -373,21 +367,10 @@ typedef struct ccx_dtvcc_ctx
 } ccx_dtvcc_ctx;
 
 
-void ccx_dtvcc_clear_packet(ccx_dtvcc_ctx *ctx);
-void ccx_dtvcc_windows_reset(ccx_dtvcc_service_decoder *decoder);
-
-void ccx_dtvcc_decoder_flush(
-			ccx_dtvcc_ctx *dtvcc,
-			ccx_dtvcc_service_decoder *decoder
-);
-
-void ccx_dtvcc_process_current_packet(ccx_dtvcc_ctx *dtvcc);
-
-void ccx_dtvcc_process_service_block(
-			ccx_dtvcc_ctx *dtvcc,
-			ccx_dtvcc_service_decoder *decoder,
-			unsigned char *data,
-			int data_length
-);
-
+void ccx_dtvcc_clear_packet						(ccx_dtvcc_ctx *ctx);
+void ccx_dtvcc_windows_reset					(ccx_dtvcc_service_decoder *decoder);
+void ccx_dtvcc_decoder_flush					(ccx_dtvcc_ctx *dtvcc, ccx_dtvcc_service_decoder *decoder);
+void ccx_dtvcc_process_current_packet	(ccx_dtvcc_ctx *dtvcc);
+void ccx_dtvcc_process_service_block	(ccx_dtvcc_ctx *dtvcc, ccx_dtvcc_service_decoder *decoder,
+																					unsigned char *data,int data_length);
 #endif

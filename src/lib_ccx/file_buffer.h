@@ -86,9 +86,9 @@ static size_t inline buffered_read_byte(struct ccx_demuxer *ctx, unsigned char *
 	return result;
 }
 
-unsigned short buffered_get_be16(struct ccx_demuxer *ctx);
+unsigned int buffered_get_le32	(struct ccx_demuxer *ctx);
+unsigned int buffered_get_be32	(struct ccx_demuxer *ctx);
 unsigned char buffered_get_byte (struct ccx_demuxer *ctx);
-unsigned int buffered_get_be32(struct ccx_demuxer *ctx);
+unsigned short buffered_get_be16(struct ccx_demuxer *ctx);
 unsigned short buffered_get_le16(struct ccx_demuxer *ctx);
-unsigned int buffered_get_le32(struct ccx_demuxer *ctx);
 #endif

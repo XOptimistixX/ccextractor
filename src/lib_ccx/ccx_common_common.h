@@ -39,32 +39,15 @@
 #define CCX_ENOMEM  -104
 
 // Declarations
-void fdprintf(
-			int fd,
-			const char *fmt,
-			...);
-void mstotime(
-			LLONG milli,
-			unsigned *hours,
-			unsigned *minutes,
-			unsigned *seconds,
-			unsigned *ms);
-void freep(
-			void *arg);
-void dbg_print(
-			LLONG mask,
-			const char *fmt, ...);
-unsigned char *debug_608toASC(
-			unsigned char *ccdata,
-			int channel);
-int add_cc_sub_text(
-			struct cc_subtitle *sub,
-			char *str,
-			LLONG start_time,
-			LLONG end_time,
-			char *info,
-			char *mode,
-			enum ccx_encoding_type);
+void fdprintf									(int fd,const char *fmt,...);
+void mstotime									(LLONG milli, unsigned *hours, unsigned *minutes,
+																						unsigned *seconds, unsigned *ms);
+void freep										(void *arg);
+void dbg_print								(LLONG mask, const char *fmt, ...);
+unsigned char *debug_608toASC	(unsigned char *ccdata, int channel);
+int add_cc_sub_text						(struct cc_subtitle *sub,	char *str,
+																LLONG start_time, LLONG end_time,
+																char *info, char *mode, enum ccx_encoding_type);
 
 extern int cc608_parity_table[256]; // From myth
 #endif

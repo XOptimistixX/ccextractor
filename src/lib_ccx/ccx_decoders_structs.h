@@ -38,14 +38,13 @@ enum ccx_eia608_format
 
 enum cc_modes
 {
-	MODE_POPON = 0,
+	MODE_POPON = 		0,
 	MODE_ROLLUP_2 = 1,
 	MODE_ROLLUP_3 = 2,
 	MODE_ROLLUP_4 = 3,
-	MODE_TEXT = 4,
-	MODE_PAINTON = 5,
-	// Fake modes to emulate stuff
-	MODE_FAKE_ROLLUP_1 = 100
+	MODE_TEXT = 		4,
+	MODE_PAINTON = 	5,
+	MODE_FAKE_ROLLUP_1 = 100 // Fake modes to emulate stuff
 };
 
 /**
@@ -62,86 +61,83 @@ typedef struct eia608_screen // A CC buffer
 	enum ccx_eia608_format format;
 	unsigned char characters[15][33];
 	unsigned char colors[15][33];
-	unsigned char fonts[15][33]; // Extra char at the end for a 0
-	int row_used[15]; // Any data in row?
-	int empty; // Buffer completely empty?
-	/** start time of this CC buffer */
-	LLONG start_time;
-	/** end time of this CC buffer */
-	LLONG end_time;
+	unsigned char fonts[15][33]; 	// Extra char at the end for a 0
+	int row_used[15]; 						// Any data in row?
+	int empty; 										// Buffer completely empty?
+
+
+	LLONG start_time;		/** start time of this CC buffer */
+	LLONG end_time;			/** end time of this CC buffer */
 	enum cc_modes mode;
-	int channel; // Currently selected channel
-	int my_field; // Used for sanity checks
-	/** XDS string */
-	char *xds_str;
-	/** length of XDS string */
-	size_t xds_len;
-	/** Class of XDS string */
-	int cur_xds_packet_class;
+	int channel; 				// Currently selected channel
+	int my_field; 			// Used for sanity checks
+
+	char *xds_str;					 /** XDS string */
+	size_t xds_len;					 /** XDS string length */
+	int cur_xds_packet_class;/** XDS string class*/
 } eia608_screen;
 
 struct ccx_decoders_common_settings_t
 {
-	LLONG subs_delay; // ms to delay (or advance) subs
-	enum ccx_output_format output_format; // What kind of output format should be used?
-	int fix_padding; // Replace 0000 with 8080 in HDTV (needed for some cards)
-	struct ccx_boundary_time extraction_start, extraction_end; // Segment we actually process
-	int cc_to_stdout;
-	int extract; // Extract 1st, 2nd or both fields
-	int fullbin; // Disable pruning of padding cc blocks
-	int no_rollup;
+	int extract; 			// Extract 1st, 2nd or both fields
+	int fullbin; 			// Disable pruning of padding cc blocks
 	int noscte20;
-	struct ccx_decoder_608_settings *settings_608; //  Contains the settings for the 608 decoder.
-	ccx_decoder_dtvcc_settings *settings_dtvcc; //Same for cea 708 captions decoder (dtvcc)
-	int cc_channel; // Channel we want to dump in srt mode
+	int no_rollup;
+	int cc_channel; 	// Channel we want to dump in srt mode
+	int fix_padding;	// Replace 0000 with 8080 in HDTV (needed for some cards)
+	int cc_to_stdout;
+	int program_number;
+	int xds_write_to_file;
+	enum ccx_code_type codec;
+	enum ccx_output_format output_format; // What kind of output format should be used?
+	void *private_data;
+	struct ccx_decoder_608_settings *settings_608; 						 // Contains the settings for the 608 decoder.
+	struct ccx_boundary_time extraction_start, extraction_end; // Segment we actually process
 	unsigned send_to_srv;
 	unsigned int hauppauge_mode; // If 1, use PID=1003, process specially and so on
-	int program_number;
-	enum ccx_code_type codec;
-	int xds_write_to_file;
-	void *private_data;
+	LLONG subs_delay; // ms to delay (or advance) subs
+	ccx_decoder_dtvcc_settings *settings_dtvcc; //Same for cea 708 captions decoder (dtvcc)
 };
 
 struct lib_cc_decode
 {
+	int noscte20;
+	int no_rollup; 				// If 1, write one line at a time
+	int fix_padding; 			// Replace 0000 with 8080 in HDTV (needed for some cards)
 	int cc_stats[4];
-	int saw_caption_block;
 	int processed_enough; // If 1, we have enough lines, time, etc.
+	int saw_caption_block;
 
 	/* 608 contexts - note that this shouldn't be global, they should be
 	per program */
 	void *context_cc608_field_1;
 	void *context_cc608_field_2;
 
-	int no_rollup; // If 1, write one line at a time
-	int noscte20;
-	int fix_padding; // Replace 0000 with 8080 in HDTV (needed for some cards)
-	enum ccx_output_format write_format; // 0=Raw, 1=srt, 2=SMI
-	struct ccx_boundary_time extraction_start, extraction_end; // Segment we actually process
-	LLONG subs_delay; // ms to delay (or advance) subs
-	int extract; // Extract 1st, 2nd or both fields
-	int fullbin; // Disable pruning of padding cc blocks
-	struct cc_subtitle dec_sub;
+	int extract; 													// Extract 1st, 2nd or both fields
+	int fullbin; 													// Disable pruning of padding cc blocks
+	enum ccx_output_format write_format; 	// 0=Raw, 1=srt, 2=SMI
 	enum ccx_bufferdata_type in_bufferdatatype;
-	unsigned int hauppauge_mode; // If 1, use PID=1003, process specially and so on
+	struct cc_subtitle dec_sub;
+	struct ccx_boundary_time extraction_start, extraction_end; // Segment we actually process
+	unsigned int hauppauge_mode; 	// If 1, use PID=1003, process specially and so on
+	LLONG subs_delay; 						// ms to delay (or advance) subs
 
 	int frames_since_last_gop;
 	/* GOP-based timing */
 	int saw_gop_header;
+	int program_number;
+	// Set to true if data is buffered
+	int is_alloc;
+	int has_ccdata_buffered;
 	/* Time info for timed-transcript */
 	int max_gop_length; // (Maximum) length of a group of pictures
 	int last_gop_length; // Length of the previous group of pictures
 	unsigned total_pulldownfields;
 	unsigned total_pulldownframes;
-	int program_number;
 	struct list_head list;
+	struct avc_ctx *avc_ctx;
 	struct ccx_common_timing_ctx *timing;
 	enum ccx_code_type codec;
-	// Set to true if data is buffered
-	int has_ccdata_buffered;
-	int is_alloc;
-
-	struct avc_ctx *avc_ctx;
 	void *private_data;
 
 	/* General video information */

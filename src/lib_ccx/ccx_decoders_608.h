@@ -19,45 +19,43 @@ struct ccx_decoder_608_report
 
 typedef struct ccx_decoder_608_settings
 {
-			int direct_rollup; // Write roll-up captions directly instead of line by line?
-			int force_rollup; // 0=Disabled, 1, 2 or 3=max lines in roll-up mode
-			int no_rollup; // If 1, write one line at a time
-			unsigned char default_color; // Default color to use.
+			int direct_rollup; 			// Write roll-up captions directly instead of line by line?
+			int force_rollup; 			// 0=Disabled, 1, 2 or 3=max lines in roll-up mode
+			int no_rollup; 					// If 1, write one line at a time
 			int screens_to_process; // How many screenfuls we want? Use -1 for unlimited
 			struct ccx_decoder_608_report *report;
+			unsigned char default_color; // Default color to use.
 } ccx_decoder_608_settings;
 
 typedef struct ccx_decoder_608_context
 {
-			ccx_decoder_608_settings *settings;
-			eia608_screen buffer1;
-			eia608_screen buffer2;
 			int cursor_row, cursor_column;
 			int visible_buffer;
 			int screenfuls_counter; // Number of meaningful screenfuls written
-			LLONG current_visible_start_ms; // At what time did the current visible buffer became so?
-			enum cc_modes mode;
-			unsigned char last_c1, last_c2;
-			int channel; // Currently selected channel
-			unsigned char current_color; // Color we are currently using to write
-			unsigned char font; // Font we are currently using to write
-			int rollup_base_row;
-			LLONG ts_start_of_current_line; /* Time at which the first character for current line was received, =-1 no character received yet */
-			LLONG ts_last_char_received; /* Time at which the last written character was received, =-1 no character received yet */
-			int new_channel; // The new channel after a channel change
-			int my_field; // Used for sanity checks
-			int my_channel; // Used for sanity checks
-			long bytes_processed_608; // To be written ONLY by process_608
+			int channel; 						// Currently selected channel
+			int new_channel; 				// The new channel after a channel change
+			int my_channel; 				// Used for sanity checks
+			int my_field; 					// Used for sanity checks
+			int *halt; 							// Can be used to halt the feeding of caption data. Set to 1 if screens_to_progress != -1 && screenfuls_counter >= screens_to_process
+			int cc_to_stdout; 			// If this is set to 1, the stdout will be flushed when data was written to the screen during a process_608 call.
 			int have_cursor_position;
-
-			int *halt; // Can be used to halt the feeding of caption data. Set to 1 if screens_to_progress != -1 && screenfuls_counter >= screens_to_process
-			int cc_to_stdout; // If this is set to 1, the stdout will be flushed when data was written to the screen during a process_608 call.
-			struct ccx_decoder_608_report *report;
-			LLONG subs_delay; // ms to delay (or advance) subs
-			enum ccx_output_format output_format; // What kind of output format should be used?
+			int rollup_base_row;
 			int textprinted;
+			enum cc_modes mode;
+			enum ccx_output_format output_format; // What kind of output format should be used?
+			long bytes_processed_608; 						// To be written ONLY by process_608
+			struct ccx_decoder_608_report *report;
 			struct ccx_common_timing_ctx *timing;
-
+			unsigned char last_c1, last_c2;
+			unsigned char current_color; 		// Color we are currently using to write
+			unsigned char font; 						// Font we are currently using to write
+			LLONG ts_start_of_current_line; /* Time at which the first character for current line was received, =-1 no character received yet */
+			LLONG ts_last_char_received; 		/* Time at which the last written character was received, =-1 no character received yet */
+			LLONG current_visible_start_ms; // At what time did the current visible buffer became so?
+			LLONG subs_delay; 							// ms to delay (or advance) subs
+			ccx_decoder_608_settings *settings;
+			eia608_screen buffer1;
+			eia608_screen buffer2;
 } ccx_decoder_608_context;
 
 
@@ -66,23 +64,23 @@ extern const char *color_text[MAX_COLOR][2];
 
 typedef enum ccx_decoder_608_color_code
 {
-			COL_WHITE = 0,
-			COL_GREEN = 1,
-			COL_BLUE = 2,
-			COL_CYAN = 3,
-			COL_RED = 4,
-			COL_YELLOW = 5,
+			COL_WHITE = 	0,
+			COL_GREEN = 	1,
+			COL_BLUE = 		2,
+			COL_CYAN = 		3,
+			COL_RED = 		4,
+			COL_YELLOW = 	5,
 			COL_MAGENTA = 6,
 			COL_USERDEFINED = 7,
-			COL_BLACK = 8,
+			COL_BLACK = 	8,
 			COL_TRANSPARENT = 9
 } ccx_decoder_608_color_code;
 
 
 enum font_bits
 {
-			FONT_REGULAR = 0,
-			FONT_ITALICS = 1,
+			FONT_REGULAR = 		0,
+			FONT_ITALICS = 		1,
 			FONT_UNDERLINED = 2,
 			FONT_UNDERLINED_ITALICS = 3
 };
@@ -107,9 +105,8 @@ enum command_code
 			COM_ALARMON = 15,
 			COM_DELETETOENDOFROW = 16,
 			COM_RESUMEDIRECTCAPTIONING = 17,
-			// Non existing commands we insert to have the decoder
-			// special stuff for us.
-			COM_FAKE_RULLUP1 = 18
+			COM_FAKE_RULLUP1 = 18	// Non existing commands we insert to have the decoder
+														// special stuff for us.
 };
 
 
@@ -149,12 +146,7 @@ int process608(
  * Issue a EraseDisplayedMemory here so if there's any captions pending
  * they get written to cc_subtitle
  */
-void flush_608_context(
-			ccx_decoder_608_context *context,
-			struct cc_subtitle *sub);
-
-int write_cc_buffer(
-			ccx_decoder_608_context *context,
-			struct cc_subtitle *sub);
+void flush_608_context(ccx_decoder_608_context *context, struct cc_subtitle *sub);
+int write_cc_buffer		(ccx_decoder_608_context *context, struct cc_subtitle *sub);
 
 #endif

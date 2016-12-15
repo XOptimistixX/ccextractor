@@ -29,35 +29,36 @@ extern const unsigned char lc6[1];
 
 extern unsigned char rcwt_header[11];
 
-#define ONEPASS 120 /* Bytes we can always look ahead without going out of limits */
-#define BUFSIZE (2048*1024+ONEPASS) /* 2 Mb plus the safety pass */
+#define ONEPASS 120 														/* Bytes we can always look ahead without going out of limits */
+#define BUFSIZE (2048*1024+ONEPASS) 						/* 2 Mb plus the safety pass */
 #define MAX_CLOSED_CAPTION_DATA_PER_PICTURE 32
-#define EIA_708_BUFFER_LENGTH   2048 // TODO: Find out what the real limit is
-#define TS_PACKET_PAYLOAD_LENGTH     184     // From specs
-#define SUBLINESIZE 2048 // Max. length of a .srt line - TODO: Get rid of this
+#define EIA_708_BUFFER_LENGTH   2048 						// TODO: Find out what the real limit is
+#define TS_PACKET_PAYLOAD_LENGTH     184     		// From specs
+#define SUBLINESIZE 2048 												// Max. length of a .srt line - TODO: Get rid of this
 #define STARTBYTESLENGTH	(1024*1024)
 #define UTF8_MAX_BYTES 6
 
-#define XMLRPC_CHUNK_SIZE (64*1024) // 64 Kb per chunk, to avoid too many realloc()
+#define XMLRPC_CHUNK_SIZE (64*1024) 						// 64 Kb per chunk, to avoid too many realloc()
 
 enum ccx_debug_message_types
 {
 		/* Each debug message now belongs to one of these types. Use bitmaps in case
 		   we want one message to belong to more than one type. */
-	CCX_DMT_PARSE=												1, // Show information related to parsing the container
-	CCX_DMT_VIDES=												2,// Show video stream related information
-	CCX_DMT_TIME=													4, // Show GOP and PTS timing information
-	CCX_DMT_VERBOSE=											8, // Show lots of debugging output
 
-	CCX_DMT_DECODER_608=									0x10, // Show CC-608 decoder debug?
-	CCX_DMT_708=													0x20, // Show CC-708 decoder debug?
-	CCX_DMT_DECODER_XDS=									0x40, // Show XDS decoder debug?
-	CCX_DMT_CBRAW=												0x80, // Caption blocks with FTS timing
-	CCX_DMT_GENERIC_NOTICES=							0x100, // Generic, always displayed even if no debug is selected
-	CCX_DMT_TELETEXT=											0x200, // Show teletext debug?
-	CCX_DMT_PAT=													0x400, // Program Allocation Table dump
-	CCX_DMT_PMT=													0x800, // Program Map Table dump
-	CCX_DMT_LEVENSHTEIN=									0x1000, // Levenshtein distance calculations
+	CCX_DMT_PARSE =												1, 			// Show information related to parsing the container
+	CCX_DMT_VIDES =												2,			// Show video stream related information
+	CCX_DMT_TIME =												4, 			// Show GOP and PTS timing information
+	CCX_DMT_VERBOSE =											8, 			// Show lots of debugging output
+
+	CCX_DMT_DECODER_608 =									0x10, 	// Show CC-608 decoder debug?
+	CCX_DMT_708 =													0x20, 	// Show CC-708 decoder debug?
+	CCX_DMT_DECODER_XDS =									0x40, 	// Show XDS decoder debug?
+	CCX_DMT_CBRAW =												0x80, 	// Caption blocks with FTS timing
+	CCX_DMT_GENERIC_NOTICES =							0x100, 	// Generic, always displayed even if no debug is selected
+	CCX_DMT_TELETEXT =										0x200, 	// Show teletext debug?
+	CCX_DMT_PAT =													0x400, 	// Program Allocation Table dump
+	CCX_DMT_PMT =													0x800, 	// Program Map Table dump
+	CCX_DMT_LEVENSHTEIN =									0x1000, // Levenshtein distance calculations
 
 #ifdef ENABLE_SHARING
 	CCX_DMT_SHARE = 											0x2000, //Extracted captions sharing service
@@ -250,7 +251,6 @@ enum ccx_bufferdata_type
 enum ccx_frame_type
 {
 			CCX_FRAME_TYPE_RESET_OR_UNKNOWN = 0,
-
 			CCX_FRAME_TYPE_I_FRAME = 1,
 			CCX_FRAME_TYPE_P_FRAME = 2,
 			CCX_FRAME_TYPE_B_FRAME = 3,
@@ -258,9 +258,9 @@ enum ccx_frame_type
 };
 
 typedef enum {
-			YES = 1,
-			NO = 0,
-			UNDEF = 0xff
+		NO = 0,
+		YES = 1,
+		UNDEF = 0xff
 } bool_t;
 
 enum ccx_code_type

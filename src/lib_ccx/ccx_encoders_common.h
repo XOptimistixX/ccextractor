@@ -47,58 +47,45 @@ struct encoder_ctx
 {
 	/* common buffer used by all encoder */
 	unsigned char *buffer;
-	/* capacity of buffer */
-	unsigned int capacity;
-	/* keep count of srt subtitle*/
-	unsigned int srt_counter;
-
-	/* Did we write the WebVTT sync header already? */
-	unsigned int wrote_webvtt_sync_header;
+	unsigned int capacity; 									/* capacity of buffer */
+	unsigned int srt_counter; 							/* keep count of srt subtitle*/
+	unsigned int wrote_webvtt_sync_header; /* Did we write the WebVTT sync header already? */
 
 	/* Input outputs */
-	/* Flag giving hint that output is send to server through network */
-	unsigned int send_to_srv;
-	/* Used only in Spupng output */
-	int multiple_files;
-	/* Used only in Spupng output and creating name of output file*/
-	char *first_input_file;
-	/* Its array with length of number of languages */
-	struct ccx_s_write *out;
-	/* number of member in array of write out array */
-	int nb_out;
-	/* Input file format used in Teletext for exceptional output */
-	unsigned int in_fileformat; //1 =Normal, 2=Teletext
-	/* Keep output file closed when not actually writing to it and start over each time (add headers, etc) */
-	unsigned int keep_output_closed;
-	/* Force a flush on the file buffer whenever content is written */
-	int force_flush;
-	/* Keep track of whether -UCLA used */
-	int ucla;
+	int multiple_files;					/* Used only in Spupng output */
+	int nb_out;									/* number of member in array of write out array */
+	int force_flush; 						/* Force a flush on the file buffer whenever content is written */
+	int ucla; 									/* Keep track of whether -UCLA used */
+
+	char *first_input_file;			/* Used only in Spupng output and creating name of output file*/
+	struct ccx_s_write *out;		/* Its array with length of number of languages */
 
 	struct ccx_common_timing_ctx *timing; /* Some encoders need access to PTS, such as WebVTT */
+	unsigned int send_to_srv;							/* Flag giving hint that output is send to server through network */
+	unsigned int in_fileformat; 					/* Input file format used in Teletext for exceptional output */
+																				//1 =Normal, 2=Teletext
+	unsigned int keep_output_closed;			/* Keep output file closed when not actually writing to it and start over each time (add headers, etc) */
 
 	/* Flag saying BOM to be written in each output file */
-	enum ccx_encoding_type encoding;
-	enum ccx_output_format write_format; // 0=Raw, 1=srt, 2=SMI
-	int generates_file;
-	struct ccx_encoders_transcript_format *transcript_settings; // Keeps the settings for generating transcript output files.
 	int no_bom;
-	int sentence_cap ; // FIX CASE? = Fix case?
-
-	int trim_subs; // "    Remove spaces at sides?    "
-	int autodash; // Add dashes (-) before each speaker automatically?
+	int extract;
+	int autodash; 				// Add dashes (-) before each speaker automatically?
+	int trim_subs; 				// "    Remove spaces at sides?    "
+	int sentence_cap ; 		// FIX CASE? = Fix case?
 	int no_font_color;
+	int dtvcc_extract; 		//1 or 0 depending if we have to handle dtvcc
+	int generates_file;
 	int no_type_setting;
 	int gui_mode_reports; // If 1, output in stderr progress updates so the GUI can grab them
-	unsigned char *subline; // Temp storage for storing each line
-	int extract;
-
-	int dtvcc_extract; //1 or 0 depending if we have to handle dtvcc
+	enum ccx_encoding_type encoding;
+	enum ccx_output_format write_format; // 0=Raw, 1=srt, 2=SMI
+	struct ccx_encoders_transcript_format *transcript_settings; // Keeps the settings for generating transcript output files.
+	// Temp storage for storing each line
+	unsigned char *subline;
 	ccx_dtvcc_writer_ctx dtvcc_writers[CCX_DTVCC_MAX_SERVICES];
 
 	/* Timing related variables*/
-	/* start time of previous sub */
-	LLONG prev_start;
+	LLONG prev_start; /* start time of previous sub */
 	LLONG subs_delay;
 	LLONG last_displayed_subs_ms;
 	enum ccx_output_date_format date_format;
@@ -108,7 +95,7 @@ struct encoder_ctx
 	int startcredits_displayed;
 	char *start_credits_text;
 	char *end_credits_text;
-	struct ccx_boundary_time startcreditsnotbefore, startcreditsnotafter; // Where to insert start credits, if possible
+	struct ccx_boundary_time startcreditsnotbefore, startcreditsnotafter; 	// Where to insert start credits, if possible
 	struct ccx_boundary_time startcreditsforatleast, startcreditsforatmost; // How long to display them?
 	struct ccx_boundary_time endcreditsforatleast, endcreditsforatmost;
 

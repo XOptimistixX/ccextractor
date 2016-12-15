@@ -28,12 +28,9 @@ struct dvb_config
 {
 	unsigned char n_language;
 	unsigned int lang_index[MAX_LANGUAGE_PER_DESC];
-	/* subtitle type */
-	unsigned char sub_type[MAX_LANGUAGE_PER_DESC];
-	/* composition page id */
-	unsigned short composition_id[MAX_LANGUAGE_PER_DESC];
-	/* ancillary_page_id */
-	unsigned short ancillary_id[MAX_LANGUAGE_PER_DESC];
+	unsigned char sub_type[MAX_LANGUAGE_PER_DESC]; 				/* subtitle type */
+	unsigned short composition_id[MAX_LANGUAGE_PER_DESC]; /* composition page id */
+	unsigned short ancillary_id[MAX_LANGUAGE_PER_DESC]; 	/* ancillary_page_id */
 };
 
 /**

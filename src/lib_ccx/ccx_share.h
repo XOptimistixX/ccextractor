@@ -32,11 +32,11 @@ typedef enum _ccx_share_status {
 } ccx_share_status;
 
 void ccx_sub_entry_message_cleanup(CcxSubEntryMessage *);
-void ccx_sub_entry_message_print(CcxSubEntryMessage *);
+void ccx_sub_entry_message_print	(CcxSubEntryMessage *);
 
-void ccx_sub_entries_init(ccx_sub_entries *);
+void ccx_sub_entries_init		(ccx_sub_entries *);
 void ccx_sub_entries_cleanup(ccx_sub_entries *);
-void ccx_sub_entries_print(ccx_sub_entries *);
+void ccx_sub_entries_print	(ccx_sub_entries *);
 
 ccx_share_status ccx_share_launch_translator(char *langs, char *google_api_key);
 ccx_share_status ccx_share_start(const char *);

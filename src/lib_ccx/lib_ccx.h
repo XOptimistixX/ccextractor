@@ -44,26 +44,26 @@ struct file_report
 // Stuff for telxcc.c
 struct ccx_s_teletext_config
 {
-	uint8_t verbose : 1; // should telxcc be verbose?
-	uint16_t page; // teletext page containing cc we want to filter
-	uint16_t tid; // 13-bit packet ID for teletext stream
-	double offset; // time offset in seconds
-	uint8_t bom : 1; // print UTF-8 BOM characters at the beginning of output
-	uint8_t nonempty : 1; // produce at least one (dummy) frame
-	// uint8_t se_mode : 1; // search engine compatible mode => Uses CCExtractor's write_format
-	// uint64_t utc_refvalue; // UTC referential value => Moved to ccx_decoders_common, so can be used for other decoders (608/xds) too
-	uint16_t user_page; // Page selected by user, which MIGHT be different to 'page' depending on autodetection stuff
+	uint8_t verbose : 1; 							// should telxcc be verbose?
+	uint16_t page; 										// teletext page containing cc we want to filter
+	uint16_t tid; 										// 13-bit packet ID for teletext stream
+	uint8_t bom : 1; 									// print UTF-8 BOM characters at the beginning of output
+	uint8_t nonempty : 1; 						// produce at least one (dummy) frame
+																		// uint8_t se_mode : 1; // search engine compatible mode => Uses CCExtractor's write_format
+																		// uint64_t utc_refvalue; // UTC referential value => Moved to ccx_decoders_common, so can be used for other decoders (608/xds) too
+	uint16_t user_page; 							// Page selected by user, which MIGHT be different to 'page' depending on autodetection stuff
 	int levdistmincnt, levdistmaxpct; // Means 2 fails or less is "the same", 10% or less is also "the same"
-	struct ccx_boundary_time extraction_start, extraction_end; // Segment we actually process
-	enum ccx_output_format write_format; // 0=Raw, 1=srt, 2=SMI
-	int gui_mode_reports; // If 1, output in stderr progress updates so the GUI can grab them
-	enum ccx_output_date_format date_format;
-	int noautotimeref; // Do NOT set time automatically?
-	unsigned send_to_srv;
-	enum ccx_encoding_type encoding;
+	int gui_mode_reports; 						// If 1, output in stderr progress updates so the GUI can grab them
+	int noautotimeref; 								// Do NOT set time automatically?
 	int nofontcolor;
 	int nohtmlescape;
 	char millis_separator;
+	enum ccx_encoding_type encoding;
+	enum ccx_output_format write_format; 												// 0=Raw, 1=srt, 2=SMI
+	enum ccx_output_date_format date_format;
+	double offset; 																							// time offset in seconds
+	struct ccx_boundary_time extraction_start, extraction_end; 	// Segment we actually process
+	unsigned send_to_srv;
 };
 
 struct ccx_s_mp4Cfg
@@ -102,21 +102,19 @@ struct lib_ccx_ctx
 	// See -d from
 
 	int cc_to_stdout; // If 1, captions go to stdout instead of file
-
-
 	LLONG subs_delay; // ms to delay (or advance) subs
 
 	int startcredits_displayed;
 	int end_credits_displayed;
 	LLONG last_displayed_subs_ms; // When did the last subs end?
-	LLONG screens_to_process; // How many screenfuls we want?
-	char *basefilename; // Input filename without the extension
+	LLONG screens_to_process; 		// How many screenfuls we want?
+	char *basefilename; 					// Input filename without the extension
 
-	const char *extension; // Output extension
-	int current_file; // If current_file!=1, we are processing *inputfile[current_file]
+	const char *extension; 				// Output extension
+	int current_file; 						// If current_file!=1, we are processing *inputfile[current_file]
 
-	char **inputfile; // List of files to process
-	int num_input_files; // How many?
+	char **inputfile; 						// List of files to process
+	int num_input_files; 					// How many?
 
 	unsigned teletext_warning_shown; // Did we detect a possible PAL (with teletext subs) and told the user already?
 
@@ -130,10 +128,10 @@ struct lib_ccx_ctx
 	struct file_report freport;
 
 	unsigned int hauppauge_mode; // If 1, use PID=1003, process specially and so on
-	int live_stream; /* -1 -> Not a complete file but a live stream, without timeout
-                       0 -> A regular file
-                      >0 -> Live stream with a timeout of this value in seconds */
-	int binary_concat; // Disabled by -ve or --videoedited
+	int live_stream; 						/* -1 -> Not a complete file but a live stream, without timeout
+                       						0 -> A regular file
+                      					 >0 -> Live stream with a timeout of this value in seconds */
+	int binary_concat; 					// Disabled by -ve or --videoedited
 	int multiprogram;
 	enum ccx_output_format write_format; // 0=Raw, 1=srt, 2=SMI
 
@@ -150,11 +148,11 @@ struct lib_ccx_ctx* init_libraries(struct ccx_s_options *opt);
 void dinit_libraries(struct lib_ccx_ctx **ctx);
 
 //params.c
-int parse_parameters (struct ccx_s_options *opt, int argc, char *argv[]);
-void print_usage (void);
-int detect_input_file_overwrite(struct lib_ccx_ctx *ctx, const char *output_filename);
 int atoi_hex (char *s);
 int stringztoms (const char *s, struct ccx_boundary_time *bt);
+int parse_parameters (struct ccx_s_options *opt, int argc, char *argv[]);
+int detect_input_file_overwrite(struct lib_ccx_ctx *ctx, const char *output_filename);
+void print_usage (void);
 
 // general_loop.c
 void position_sanity_check		(struct ccx_demuxer *ctx);
@@ -170,35 +168,26 @@ size_t process_raw						(struct lib_cc_decode *ctx, struct cc_subtitle *sub,
 void process_hex (char *filename);
 
 extern int end_of_file;
-
-// asf_functions.c
-int asf_get_more_data(struct lib_ccx_ctx *ctx, struct demuxer_data **ppdata);
-
-// wtv_functions.c
-int wtv_get_more_data(struct lib_ccx_ctx *ctx, struct demuxer_data **ppdata);
-
-// es_functions.c
-size_t process_m2v(struct lib_cc_decode *ctx, unsigned char *data, size_t length, struct cc_subtitle *sub);
-
 extern unsigned top_field_first;
 
-// es_userdata.c
-int user_data(struct lib_cc_decode *ctx, struct bitstream *ustream, int udtype, struct cc_subtitle *sub);
+
+int asf_get_more_data	(struct lib_ccx_ctx *ctx, struct demuxer_data **ppdata); // asf_functions.c
+int wtv_get_more_data	(struct lib_ccx_ctx *ctx, struct demuxer_data **ppdata); // wtv_functions.c
+int user_data					(struct lib_cc_decode *ctx, struct bitstream *ustream, int udtype, struct cc_subtitle *sub); // es_userdata.c
+size_t process_m2v	 	(struct lib_cc_decode *ctx, unsigned char *data, size_t length, struct cc_subtitle *sub); // es_functions.c
 
 // bitstream.c - see bitstream.h
-
 // file_functions.c
-LLONG get_file_size (int in);
-LLONG get_total_file_size (struct lib_ccx_ctx *ctx);
+int switch_to_next_file 	(struct lib_ccx_ctx *ctx, LLONG bytesinbuffer);
 void prepare_for_new_file (struct lib_ccx_ctx *ctx);
-void close_input_file (struct lib_ccx_ctx *ctx);
-int switch_to_next_file (struct lib_ccx_ctx *ctx, LLONG bytesinbuffer);
-void return_to_buffer (struct ccx_demuxer *ctx, unsigned char *buffer, unsigned int bytes);
+void close_input_file 		(struct lib_ccx_ctx *ctx);
+void return_to_buffer 		(struct ccx_demuxer *ctx, unsigned char *buffer, unsigned int bytes);
+LLONG get_total_file_size (struct lib_ccx_ctx *ctx);
+LLONG get_file_size 			(int in);
 
 // sequencing.c
 void init_hdcc (struct lib_cc_decode *ctx);
-void store_hdcc(
-			struct lib_cc_decode *ctx,
+void store_hdcc(struct lib_cc_decode *ctx,
 			unsigned char *cc_data,
 			int cc_count,
 			int sequence_number,
@@ -206,11 +195,11 @@ void store_hdcc(
 			struct cc_subtitle *sub
 );
 
-void anchor_hdcc(struct lib_cc_decode *ctx, int seq);
+void anchor_hdcc	(struct lib_cc_decode *ctx, int seq);
 void process_hdcc (struct lib_cc_decode *ctx, struct cc_subtitle *sub);
 
 // params_dump.c
-void params_dump(struct lib_ccx_ctx *ctx);
+void params_dump			(struct lib_ccx_ctx *ctx);
 void print_file_report(struct lib_ccx_ctx *ctx);
 
 // output.c
@@ -366,11 +355,11 @@ extern unsigned teletext_mode;
 
 extern struct ccx_s_teletext_config tlt_config;
 
-int is_decoder_processed_enough(struct lib_ccx_ctx *ctx);
-struct lib_cc_decode *update_decoder_list_cinfo(struct lib_ccx_ctx *ctx, struct cap_info* cinfo);
-struct lib_cc_decode *update_decoder_list(struct lib_ccx_ctx *ctx);
+int is_decoder_processed_enough									(struct lib_ccx_ctx *ctx);
+struct lib_cc_decode *update_decoder_list_cinfo	(struct lib_ccx_ctx *ctx, struct cap_info* cinfo);
+struct lib_cc_decode *update_decoder_list				(struct lib_ccx_ctx *ctx);
 
-struct encoder_ctx *update_encoder_list_cinfo(struct lib_ccx_ctx *ctx, struct cap_info* cinfo);
-struct encoder_ctx * update_encoder_list(struct lib_ccx_ctx *ctx);
-struct encoder_ctx *get_encoder_by_pn(struct lib_ccx_ctx *ctx, int pn);
+struct encoder_ctx *update_encoder_list_cinfo		(struct lib_ccx_ctx *ctx, struct cap_info* cinfo);
+struct encoder_ctx * update_encoder_list				(struct lib_ccx_ctx *ctx);
+struct encoder_ctx *get_encoder_by_pn						(struct lib_ccx_ctx *ctx, int pn);
 #endif

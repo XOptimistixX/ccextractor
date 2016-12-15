@@ -79,8 +79,8 @@ struct lib_hardsubx_ctx
 };
 
 struct lib_hardsubx_ctx* _init_hardsubx(struct ccx_s_options *options);
+void hardsubx							(struct ccx_s_options *options);
 void _hardsubx_params_dump(struct ccx_s_options *options, struct lib_hardsubx_ctx *ctx);
-void hardsubx(struct ccx_s_options *options);
 
 //hardsubx_decoder.c
 int hardsubx_process_frames_linear(struct lib_hardsubx_ctx *ctx, struct encoder_ctx *enc_ctx);
@@ -109,7 +109,7 @@ char *get_ocr_text_letterwise_threshold	(struct lib_hardsubx_ctx *ctx, PIX *imag
 int edit_distance(char * word1, char * word2, int len1, int len2);
 int64_t convert_pts_to_ms(int64_t pts, AVRational time_base);
 int64_t convert_pts_to_ns(int64_t pts, AVRational time_base);
-int64_t convert_pts_to_s(int64_t pts, AVRational time_base);
+int64_t convert_pts_to_s (int64_t pts, AVRational time_base);
 
 #endif
 

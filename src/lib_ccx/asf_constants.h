@@ -34,15 +34,15 @@ typedef struct {
 	int VideoStreamNumber;
 	int AudioStreamNumber;
 	int CaptionStreamNumber;
-	int CaptionStreamStyle; // 1 = NTSC, 2 = ATSC
-	int DecodeStreamNumber; // The stream that is chosen to be decoded
-	int DecodeStreamPTS; // This will be used for the next returned block
-	int currDecodeStreamPTS; // Time of the data returned by the function
-	int prevDecodeStreamPTS; // Previous time
-	int VideoStreamMS; // See ableve, just for video
+	int CaptionStreamStyle; 		// 1 = NTSC, 2 = ATSC
+	int DecodeStreamNumber; 		// The stream that is chosen to be decoded
+	int DecodeStreamPTS; 				// This will be used for the next returned block
+	int currDecodeStreamPTS; 		// Time of the data returned by the function
+	int prevDecodeStreamPTS; 		// Previous time
+	int VideoStreamMS; 					// See ableve, just for video
 	int currVideoStreamMS;
 	int prevVideoStreamMS;
-	int VideoJump; // Remember a jump in the video timeline
+	int VideoJump; 							// Remember a jump in the video timeline
 } asf_data_stream_properties;
 
 #define STREAMNUM  10
@@ -59,16 +59,14 @@ typedef struct {
 	uint32_t PacketSize;
 
 	// Stream Properties Object variables
-	asf_data_stream_properties StreamProperties;
-	// Extended Stream Properties  - for DVR-MS presentation timestamp
-	// Store the Payload Extension System Data Size.  First index holds the
-	// stream number and the second index holds the Extension System entry.
-	// I.e. PayloadExtSize[1][2] is the third Payload Extension System
-	// entry for stream 1. (The streams are numbered starting from 1)
-	// FIXME: What happens if we have more than 9 streams with more than
-	// 10 entries.
-	int PayloadExtSize[STREAMNUM][PAYEXTNUM];
-	int PayloadExtPTSEntry[STREAMNUM];
+	asf_data_stream_properties StreamProperties; 	// Extended Stream Properties  - for DVR-MS presentation timestamp
+	int PayloadExtSize[STREAMNUM][PAYEXTNUM];			// Store the Payload Extension System Data Size.  First index holds the
+	int PayloadExtPTSEntry[STREAMNUM];						// stream number and the second index holds the Extension System entry.
+																								// I.e. PayloadExtSize[1][2] is the third Payload Extension System
+																								// entry for stream 1. (The streams are numbered starting from 1)
+																								// FIXME: What happens if we have more than 9 streams with more than
+																								// 10 entries.
+
 
 	// Data object Header variables
 	int64_t DataObjectSize;
@@ -76,25 +74,25 @@ typedef struct {
 	int VideoClosedCaptioningFlag;
 
 	// Payload data
-	int PayloadLType; // ASF - Payload Length Type. <>0 for multiple payloads
-	uint32_t PayloadLength; // ASF - Payload Length
-	int NumberOfPayloads; // ASF - Number of payloads.
-	int payloadcur; // local
-	int PayloadStreamNumber; // ASF
-	int KeyFrame; // ASF
-	uint32_t PayloadMediaNumber; // ASF
+	int PayloadLType; 									// ASF - Payload Length Type. <>0 for multiple payloads
+	uint32_t PayloadLength; 						// ASF - Payload Length
+	int NumberOfPayloads; 							// ASF - Number of payloads.
+	int payloadcur; 										// local
+	int PayloadStreamNumber; 						// ASF
+	int KeyFrame; 											// ASF
+	uint32_t PayloadMediaNumber; 				// ASF
 
 	// Data Object Loop
-	uint32_t datapacketcur; // Current packet number
-	int64_t dobjectread; // Bytes read in Data Object
+	uint32_t datapacketcur; 						// Current packet number
+	int64_t dobjectread; 								// Bytes read in Data Object
 
 	// Payload parsing information
-	int MultiplePayloads; // ASF
-	int PacketLType; // ASF
-	int ReplicatedLType; // ASF
-	int OffsetMediaLType; // ASF
-	int MediaNumberLType; // ASF
-	int StreamNumberLType; // ASF
+	int MultiplePayloads; 							// ASF
+	int PacketLType; 										// ASF
+	int ReplicatedLType; 								// ASF
+	int OffsetMediaLType; 							// ASF
+	int MediaNumberLType; 							// ASF
+	int StreamNumberLType; 							// ASF
 	uint32_t PacketLength;
 	uint32_t PaddingLength;
 } asf_data;

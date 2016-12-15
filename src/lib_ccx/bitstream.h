@@ -1,5 +1,5 @@
 #ifndef _BITSTREAM_
-			#define _BITSTREAM_
+#define _BITSTREAM_
 
 
 // The structure holds the current position in the bitstream.
@@ -30,91 +30,50 @@ struct bitstream
 	int _i_bpos;
 };
 
-#define read_u8(bstream)
-			(uint8_t)bitstream_get_num(bstream,1,1)
-#define read_u16(bstream)
-			(uint16_t)bitstream_get_num(bstream,2,1)
-#define read_u32(bstream)
-			(uint32_t)bitstream_get_num(bstream,4,1)
-#define read_u64(bstream)
-			(uint64_t)bitstream_get_num(bstream,8,1)
+#define read_u8(bstream)			(uint8_t)		bitstream_get_num(bstream,1,1)
+#define read_u16(bstream)			(uint16_t)	bitstream_get_num(bstream,2,1)
+#define read_u32(bstream)			(uint32_t)	bitstream_get_num(bstream,4,1)
+#define read_u64(bstream)			(uint64_t)	bitstream_get_num(bstream,8,1)
 
-#define read_i8(bstream)
-			(int8_t)bitstream_get_num(bstream,1,1)
-#define read_i16(bstream)
-			(int16_t)bitstream_get_num(bstream,2,1)
-#define read_i32(bstream)
-			(int32_t)bitstream_get_num(bstream,4,1)
-#define read_i64(bstream)
-			(int64_t)bitstream_get_num(bstream,8,1)
+#define read_i8(bstream)			(int8_t)		bitstream_get_num(bstream,1,1)
+#define read_i16(bstream)			(int16_t)		bitstream_get_num(bstream,2,1)
+#define read_i32(bstream)			(int32_t)		bitstream_get_num(bstream,4,1)
+#define read_i64(bstream)			(int64_t)		bitstream_get_num(bstream,8,1)
 
 
-#define skip_u32(bstream)
-			(void)bitstream_get_num(bstream,4,1)
+#define skip_u32(bstream)			(void)			bitstream_get_num(bstream,4,1)
 
 
-#define next_u8(bstream)
-			(uint8_t)bitstream_get_num(bstream,1,0)
-#define next_u16(bstream)
-			(uint16_t)bitstream_get_num(bstream,2,0)
-#define next_u32(bstream)
-			(uint32_t)bitstream_get_num(bstream,4,0)
-#define next_u64(bstream)
-			(uint64_t)bitstream_get_num(bstream,8,0)
+#define next_u8(bstream)			(uint8_t)		bitstream_get_num(bstream,1,0)
+#define next_u16(bstream)			(uint16_t)	bitstream_get_num(bstream,2,0)
+#define next_u32(bstream)			(uint32_t)	bitstream_get_num(bstream,4,0)
+#define next_u64(bstream)			(uint64_t)	bitstream_get_num(bstream,8,0)
 
-#define next_i8(bstream)
-			(int8_t)bitstream_get_num(bstream,1,0)
-#define next_i16(bstream)
-			(int16_t)bitstream_get_num(bstream,2,0)
-#define next_i32(bstream)
-			(int32_t)bitstream_get_num(bstream,4,0)
-#define next_i64(bstream)
-			(int64_t)bitstream_get_num(bstream,8,0)
+#define next_i8(bstream)			(int8_t)		bitstream_get_num(bstream,1,0)
+#define next_i16(bstream)			(int16_t)		bitstream_get_num(bstream,2,0)
+#define next_i32(bstream)			(int32_t)		bitstream_get_num(bstream,4,0)
+#define next_i64(bstream)			(int64_t)		bitstream_get_num(bstream,8,0)
 
 
-int init_bitstream(
-			struct bitstream *bstr,
-			unsigned char *start,
-			unsigned char *end);
+int init_bitstream				(struct bitstream *bstr, unsigned char *start, unsigned char *end);
 
-uint64_t next_bits(
-			struct bitstream *bstr,
-			unsigned bnum);
-uint64_t read_bits(
-			struct bitstream *bstr,
-			unsigned bnum);
-int skip_bits(
-			struct bitstream *bstr,
-			unsigned bnum);
+uint64_t next_bits				(struct bitstream *bstr, unsigned bnum);
+uint64_t read_bits				(struct bitstream *bstr, unsigned bnum);
+int skip_bits							(struct bitstream *bstr, unsigned bnum);
 
-int is_byte_aligned(
-			struct bitstream *bstr);
-void make_byte_aligned(
-			struct bitstream *bstr);
+int is_byte_aligned				(struct bitstream *bstr);
+void make_byte_aligned		(struct bitstream *bstr);
 
-unsigned char *next_bytes(
-			struct bitstream *bstr,
-			unsigned bynum);
-unsigned char *read_bytes(
-			struct bitstream *bstr,
-			unsigned bynum);
+unsigned char *next_bytes	(struct bitstream *bstr, unsigned bynum);
+unsigned char *read_bytes	(struct bitstream *bstr, unsigned bynum);
 
-uint64_t bitstream_get_num(
-			struct bitstream *bstr,
-			unsigned bytes,
-			int advance);
+uint64_t bitstream_get_num(struct bitstream *bstr, unsigned bytes, int advance);
 
-uint64_t read_exp_golomb_unsigned(
-			struct bitstream *bstr);
-int64_t read_exp_golomb(
-			struct bitstream *bstr);
 
-uint64_t read_int_unsigned(
-			struct bitstream *bstr,
-			unsigned bnum);
-int64_t read_int(
-			struct bitstream *bstr,
-			unsigned bnum);
+uint64_t read_exp_golomb_unsigned	(struct bitstream *bstr);
+int64_t read_exp_golomb						(struct bitstream *bstr);
+uint64_t read_int_unsigned				(struct bitstream *bstr, unsigned bnum);
+int64_t read_int									(struct bitstream *bstr, unsigned bnum);
 
 uint8_t reverse8(uint8_t data);
 
